@@ -1,4 +1,5 @@
 from dados import selecoes
+import random
 
 # Menu de Seleção
 menu = """
@@ -6,6 +7,7 @@ menu = """
 [2] Adicionar seleções
 [3] Editar dicas
 [4] Remover seleções
+[5] Jogo de pistas
 [X] Sair
 """
 
@@ -23,7 +25,7 @@ while True:
 
     # Opção para adicionar seleções e suas dicas
     elif opcao == '2':
-        print("="*9 + " ADICIONAR SELEÇÃO " + "="*9)
+        print("="*9 + "\033[32mADICIONAR SELEÇÃO\033[m" + "="*9)
         pais = input("Nome da seleção: ").title()
         grupo = input("Grupo: ").upper()
         titulos = int(input("Quantidade de títulos: "))
@@ -44,7 +46,7 @@ while True:
     # Opção para editar dicas e nomes das seleções já existentes
     # Obs.3: Consultei IA para entender como editar elementos do dicionário "dados.py"
     elif opcao == '3':
-        print("="*9 + " EDITAR SELEÇÃO " + "="*9)
+        print("="*9 + "\033[33mEDITAR SELEÇÃO\033[m" + "="*9)
         pais = input("Digite o nome da seleção que deseja editar: ").title()
         if pais in selecoes:
             print(f"Editando os dados de {pais}.")
@@ -84,6 +86,7 @@ while True:
 
     # Opção para remover seleções da lista
     elif opcao == '4':
+        print("="*9 + "\033[31mELIMINAR SELEÇÃO\033[m" + "="*9)
         pais = input("Informe o nome da seleção que deseja eliminar: ").title()
         if pais in selecoes:
             del selecoes[pais]
@@ -93,5 +96,37 @@ while True:
 
 # Fim das operações do MENU
 
+# Jogo de adivinhação
+    elif opcao == '5':
+        print("="*9 + "\033[95mJOGO DE ADIVINHAÇÃO - SELEÇÃO SECRETA\033[m" + "="*9)
+        #Obs.4: Uso de IA para entender como funciona as operações da biblioteca "random"
+        pais_secreto = random.choice(list(selecoes.keys()))
+        dados_secretos = selecoes[pais_secreto]
+        pistas = [
+            f"Continente: {dados_secretos['continente']}",
+            f"Número de títulos: {dados_secretos['titulos']}",
+            f"Grupo na Copa do Mundo de 2026: {dados_secretos['grupo']}",
+            f"Principais Jogadores: {', '.join(dados_secretos['principais_jogadores'])}"
+        ]
+        print("Tente adivinhar a seleção secreta! Você receberá 4 dicas.")
+        print("Se não souber, clique em [Enter] para ver a próxima dica.\n")
+        
+        acertou = False
+        #Obs.5: Uso de IA neste laço
+        for i in range(len(pistas)):
+            print(f"-> Dica {i+1}: {pistas[i]}")
+            chute = input("Qual é o seu chute? ").title()
+            if chute == pais_secreto:
+                print(f"Você acertou :) A seleção era {pais_secreto}.")
+                acertou = True
+                break
+            elif chute != "":
+                print("Errou :( Vamos para a próxima dica...\n")
+                if not acertou:
+                    print("As dicas acabaram. Você perdeu.")
+                    print(f"A seleção secreta era: {pais_secreto}")
+                
+
+        input("\nAperte [Enter] para voltar ao menu principal...")
 
 
